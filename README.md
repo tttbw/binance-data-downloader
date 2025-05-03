@@ -120,6 +120,51 @@ binance-data-downloader --data-type spot --interval daily --symbol trades --trad
 binance-data-downloader --data-type futures --interval um/daily --symbol aggTrades --trading-pair BTCUSDT --output-dir ./my_data --proxy http://myproxy:8080
 ```
 
+## Project Structure
+
+The project is organized as follows:
+
+```
+binance-data-downloader/
+├── src/                      # Source code
+│   ├── cli/                  # Command-line interface
+│   │   ├── cli.py            # Main CLI application
+│   │   └── __init__.py
+│   ├── directory_tree/       # Directory tree providers
+│   │   ├── base.py           # Abstract base class for directory tree providers
+│   │   ├── binance.py        # Binance-specific directory tree provider
+│   │   └── __init__.py
+│   ├── downloader/           # File downloaders
+│   │   ├── base.py           # Abstract base class for downloaders
+│   │   ├── checksum.py       # Checksum verification
+│   │   ├── http_downloader.py # HTTP downloader implementation
+│   │   └── __init__.py
+│   └── __init__.py
+├── tests/                    # Unit tests
+│   ├── test_cli.py           # CLI tests
+│   ├── test_directory_tree.py # Directory tree tests
+│   ├── test_downloader.py    # Downloader tests
+│   └── __init__.py
+├── __init__.py               # Package initialization
+├── main.py                   # Entry point script
+├── pyproject.toml            # Project metadata and dependencies
+├── setup.py                  # Setup script for installation
+├── MANIFEST.in               # Package manifest
+└── LICENSE                   # License file
+```
+
+### Key Components
+
+- **CLI Module**: Handles user interaction, command-line arguments, and orchestrates the download process.
+- **Directory Tree Module**: Provides an interface to browse Binance's data repository structure.
+- **Downloader Module**: Manages file downloads, checksum verification, and file extraction.
+
+The application follows a modular design with clear separation of concerns:
+
+1. The `BinanceDirectoryTreeProvider` fetches the directory structure from Binance's data repository.
+2. The `HttpDownloader` handles downloading files, verifying checksums, and extracting ZIP files.
+3. The `CliApp` class ties everything together, providing both interactive and command-line interfaces.
+
 ## License
 
 MIT License
@@ -248,6 +293,51 @@ binance-data-downloader --data-type spot --interval daily --symbol trades --trad
 ```bash
 binance-data-downloader --data-type futures --interval um/daily --symbol aggTrades --trading-pair BTCUSDT --output-dir ./my_data --proxy http://myproxy:8080
 ```
+
+## 项目结构
+
+项目组织如下：
+
+```
+binance-data-downloader/
+├── src/                      # 源代码
+│   ├── cli/                  # 命令行界面
+│   │   ├── cli.py            # 主CLI应用程序
+│   │   └── __init__.py
+│   ├── directory_tree/       # 目录树提供者
+│   │   ├── base.py           # 目录树提供者的抽象基类
+│   │   ├── binance.py        # Binance特定的目录树提供者
+│   │   └── __init__.py
+│   ├── downloader/           # 文件下载器
+│   │   ├── base.py           # 下载器的抽象基类
+│   │   ├── checksum.py       # 校验和验证
+│   │   ├── http_downloader.py # HTTP下载器实现
+│   │   └── __init__.py
+│   └── __init__.py
+├── tests/                    # 单元测试
+│   ├── test_cli.py           # CLI测试
+│   ├── test_directory_tree.py # 目录树测试
+│   ├── test_downloader.py    # 下载器测试
+│   └── __init__.py
+├── __init__.py               # 包初始化
+├── main.py                   # 入口点脚本
+├── pyproject.toml            # 项目元数据和依赖项
+├── setup.py                  # 安装脚本
+├── MANIFEST.in               # 包清单
+└── LICENSE                   # 许可证文件
+```
+
+### 核心组件
+
+- **CLI模块**：处理用户交互、命令行参数，并协调下载过程。
+- **目录树模块**：提供浏览Binance数据仓库结构的接口。
+- **下载器模块**：管理文件下载、校验和验证和文件解压。
+
+应用程序遵循模块化设计，职责明确分离：
+
+1. `BinanceDirectoryTreeProvider`从Binance的数据仓库获取目录结构。
+2. `HttpDownloader`处理文件下载、校验和验证以及ZIP文件解压。
+3. `CliApp`类将所有组件连接在一起，提供交互式和命令行界面。
 
 ## 许可证
 
