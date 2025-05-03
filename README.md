@@ -4,7 +4,7 @@ A powerful command-line tool for downloading cryptocurrency data from Binance's 
 
 ## Overview
 
-Binance Data Downloader is a Python-based utility that allows you to easily download historical cryptocurrency data from [Binance's public data repository](https://data.binance.vision/?prefix=data/). The tool provides a user-friendly interface to browse and download various types of market data, including spot and futures trading data, with options for different time intervals and trading pairs.
+Binance Data Downloader is a Python-based utility that allows you to easily download historical cryptocurrency data from [Binance's public data repository](https://data.binance.vision/?prefix=data/). The tool provides a user-friendly interface to browse and download various types of market data, including spot,futures and option trading data, with options for different time intervals and trading pairs.
 
 ## Features
 
@@ -29,6 +29,11 @@ pip install binance-data-downloader
 
 ```bash
 uv add binance-data-downloader
+```
+or
+
+```bash
+uvx binance-data-downloader
 ```
 
 ### From Source
@@ -117,7 +122,7 @@ MIT License
 
 ## 概述
 
-Binance数据下载器是一个基于Python的实用工具，允许您轻松地从[Binance公共数据仓库](https://data.binance.vision/?prefix=data/)下载历史加密货币数据。该工具提供了一个用户友好的界面，用于浏览和下载各种类型的市场数据，包括现货和期货交易数据，并提供不同的时间间隔和交易对选项。
+Binance数据下载器是一个基于Python的实用工具，允许您轻松地从[Binance公共数据仓库](https://data.binance.vision/?prefix=data/)下载历史加密货币数据。该工具提供了一个用户友好的界面，用于浏览和下载各种类型的市场数据，包括现货、期货和期权交易数据，并提供不同的时间间隔和交易对选项。
 
 ## 功能特点
 
@@ -142,6 +147,10 @@ pip install binance-data-downloader
 
 ```bash
 uv add binance-data-downloader
+```
+or
+```bash
+uvx binance-data-downloader
 ```
 
 ### 从源代码安装
