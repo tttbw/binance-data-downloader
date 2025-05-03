@@ -71,15 +71,15 @@ class HttpDownloader(Downloader):
 
         # Configure client with proxy if specified
         client_kwargs = {}
+        # Set a timeout for all HTTP operations
+        client_kwargs["timeout"] = httpx.Timeout(30.0, connect=30.0)
+
+        # Configure proxy correctly for httpx
         if self.proxy:
-            client_kwargs["proxies"] = {"all://": self.proxy}
+            client_kwargs["proxy"] = self.proxy
 
         for attempt in range(self.retry_count + 1):
             try:
-                # Set a timeout for all HTTP operations
-                timeout = httpx.Timeout(30.0, connect=30.0)
-                client_kwargs["timeout"] = timeout
-
                 async with httpx.AsyncClient(**client_kwargs) as client:
                     # Start the request
                     async with client.stream("GET", url) as response:
