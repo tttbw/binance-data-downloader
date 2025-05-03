@@ -77,7 +77,7 @@ The tool will guide you through selecting:
 For automated downloads, you can specify parameters directly:
 
 ```bash
-binance-data-downloader --data-type spot --interval daily --symbol klines --trading-pair BTCUSDT --time-interval 1m --start-date 2023-01-01 --end-date 2023-01-31
+binance-data-downloader --data-type spot --interval daily --symbol klines --trading-pair BTCUSDT --time-interval 1m --start-date 2023-01-01 --end-date 2023-01-05 --verify-checksum --extract --extract-dir ./release/klines
 ```
 
 ### Available Options
@@ -251,7 +251,7 @@ binance-data-downloader
 对于自动下载，您可以直接指定参数：
 
 ```bash
-binance-data-downloader --data-type spot --interval daily --symbol klines --trading-pair BTCUSDT --time-interval 1m --start-date 2023-01-01 --end-date 2023-01-31
+binance-data-downloader --data-type spot --interval daily --symbol klines --trading-pair BTCUSDT --time-interval 1m --start-date 2023-01-01 --end-date 2023-01-05 --verify-checksum --extract --extract-dir ./release/klines
 ```
 
 ### 可用选项
