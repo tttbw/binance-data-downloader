@@ -21,7 +21,7 @@ setup(
     author_email="13710247598@163.com",
     description="A command-line tool for downloading cryptocurrency data",
     keywords="cryptocurrency, data, downloader",
-    url="https://github.com/yourusername/binance-data-downloader",
+    url="https://github.com/BaigeiMaster/binance-data-downloader",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",

@@ -8,13 +8,12 @@ version = "0.1.0"
 description = "A command-line tool for downloading cryptocurrency data from Binance"
 readme = "README.md"
 requires-python = ">=3.8"
-license = "MIT"
+license = { text = "MIT" }
 authors = [{ name = "Zhaorong Dai", email = "13710247598@163.com" }]
 keywords = ["cryptocurrency", "data", "downloader", "binance"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -33,8 +32,8 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/yourusername/binance-data-downloader"
-"Bug Tracker" = "https://github.com/yourusername/binance-data-downloader/issues"
+"Homepage" = "https://github.com/BaigeiMaster/binance-data-downloader"
+"Bug Tracker" = "https://github.com/BaigeiMaster/binance-data-downloader/issues"
 
 [project.scripts]
 binance-data-downloader = "src.cli.cli:main"

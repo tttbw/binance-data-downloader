@@ -1,4 +1,6 @@
-# Binance Data Downloader
+# Binance Data Downloader | Binance数据下载器
+
+[English](#overview) | [中文](#binance数据下载器)
 
 A powerful command-line tool for downloading cryptocurrency data from Binance's public data repository.
 
@@ -26,20 +28,28 @@ pip install binance-data-downloader
 ```
 
 ### Using uv
+uv is a powerful package management and execution tool. It simplifies the process of managing and running Python packages. To install binance-data-downloader using uv, you can use the following command:
 
-```bash
-uv add binance-data-downloader
-```
-or
+Use uvx (recommended):
+The uvx command invokes a tool without installing it.
+Tools are installed into temporary, isolated environments when using uvx.
 
 ```bash
 uvx binance-data-downloader
 ```
 
-### From Source
+or use uv add:
 
 ```bash
-git clone https://github.com/yourusername/binance-data-downloader.git
+uv add binance-data-downloader
+```
+This command adds the binance-data-downloader package to your uv environment.
+
+### From Source
+If you prefer to install from the source code, you can follow these steps:
+
+```bash
+git clone https://github.com/BaigeiMaster/binance-data-downloader.git
 cd binance-data-downloader
 pip install .
 ```
@@ -118,6 +128,8 @@ MIT License
 
 # Binance数据下载器
 
+*中文文档*
+
 一个强大的命令行工具，用于从Binance公共数据仓库下载加密货币数据。
 
 ## 概述
@@ -144,19 +156,29 @@ pip install binance-data-downloader
 ```
 
 ### 使用uv
+uv是一款功能强大的包管理和执行工具，简化了 Python 包的管理和运行流程。使用uv安装binance-data-downloader，可以使用以下命令：
 
-```bash
-uv add binance-data-downloader
-```
-or
+#### 使用uvx（推荐）：
+该命令在不安装工具的情况下调用工具。
+使用时，工具会安装到临时的、隔离的环境中。
+
 ```bash
 uvx binance-data-downloader
 ```
 
-### 从源代码安装
+#### 或者使用uv add：
 
 ```bash
-git clone https://github.com/yourusername/binance-data-downloader.git
+uv add binance-data-downloader
+```
+
+此命令将binance-data-downloader包添加到您的uv环境中。
+
+### 从源代码安装
+若您倾向于从源代码安装，可按以下步骤操作：
+
+```bash
+git clone https://github.com/BaigeiMaster/binance-data-downloader.git
 cd binance-data-downloader
 pip install .
 ```
