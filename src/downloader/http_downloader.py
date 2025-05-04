@@ -10,10 +10,8 @@ import aiofiles
 from loguru import logger
 import sys
 
-# Add the parent directory to the path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from src.downloader.base import Downloader
+from .base import Downloader
 from .checksum import CheckSum
 
 

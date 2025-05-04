@@ -154,8 +154,6 @@ class CliApp:
             # This is a progress update
             status_part = current_file.split(" (")[1]
             if "completed)" in status_part or "failed)" in status_part:
-                # These should be handled by the completed > 0 case above
-                # But just in case, mark as completed
                 is_completed = True
                 status_info = f" ({status_part}"
             elif "%" in status_part:
@@ -367,31 +365,30 @@ class CliApp:
         self._configure_from_args(args)
 
         try:
-            # Get available data types
-            logger.info("Getting available data types...")
-            data_types = self.directory_tree_provider.get_available_data_types()
 
             # Use pre-selected data type from command line if provided
-            if args.data_type and args.data_type in data_types:
+            if args.data_type:
                 selected_data_type = args.data_type
                 logger.info(f"Using pre-selected data type: {selected_data_type}")
             else:
+                # Get available data types
+                logger.info("Getting available data types...")
+                data_types = self.directory_tree_provider.get_available_data_types()
                 # Prompt the user to select a data type
                 selected_data_type = self._select_from_list(
                     data_types, "Available data types:"
                 )
 
-            # Get available intervals for the selected data type
-            logger.info(f"Getting available intervals for {selected_data_type}...")
-            intervals = self.directory_tree_provider.get_available_intervals(
-                selected_data_type
-            )
-
             # Use pre-selected interval from command line if provided
-            if args.interval and args.interval in intervals:
+            if args.interval:
                 selected_interval = args.interval
                 logger.info(f"Using pre-selected interval: {selected_interval}")
             else:
+                # Get available intervals for the selected data type
+                logger.info(f"Getting available intervals for {selected_data_type}...")
+                intervals = self.directory_tree_provider.get_available_intervals(
+                    selected_data_type
+                )
                 # Prompt the user to select an interval
                 # For futures data, show a more descriptive prompt
                 prompt_text = "Available intervals:"
@@ -400,66 +397,64 @@ class CliApp:
 
                 selected_interval = self._select_from_list(intervals, prompt_text)
 
-            # Get available symbols for the selected data type and interval
-            logger.info(
-                f"Getting available symbols for {selected_data_type}/{selected_interval}..."
-            )
-            symbols = self.directory_tree_provider.get_available_symbols(
-                selected_data_type, selected_interval
-            )
-
-            # Filter out empty symbols
-            symbols = [symbol for symbol in symbols if symbol.strip()]
-
-            if not symbols:
-                logger.error(
-                    f"No symbols found for {selected_data_type}/{selected_interval}"
-                )
-                return
-
             # Use pre-selected symbol from command line if provided
-            if args.symbol and args.symbol in symbols:
+            if args.symbol:
                 selected_symbol = args.symbol
                 logger.info(f"Using pre-selected symbol: {selected_symbol}")
             else:
+                # Get available symbols for the selected data type and interval
+                logger.info(
+                    f"Getting available symbols for {selected_data_type}/{selected_interval}..."
+                )
+                symbols = self.directory_tree_provider.get_available_symbols(
+                    selected_data_type, selected_interval
+                )
+
+                # Filter out empty symbols
+                symbols = [symbol for symbol in symbols if symbol.strip()]
+
+                if not symbols:
+                    logger.error(
+                        f"No symbols found for {selected_data_type}/{selected_interval}"
+                    )
+                    return
                 # Prompt the user to select a symbol
                 selected_symbol = self._select_from_list(symbols, "Available symbols:")
 
-            # Get trading pairs for the selected data type, interval, and symbol
-            logger.info(
-                f"Getting trading pairs for {selected_data_type}/{selected_interval}/{selected_symbol}..."
-            )
-
-            # Construct the path differently for futures data
-            if selected_data_type == "futures" and "/" in selected_interval:
-                # Split the interval into subtype and actual interval
-                subtype, actual_interval = selected_interval.split("/")
-                symbol_path = f"data/{selected_data_type}/{subtype}/{actual_interval}/{selected_symbol}/"
-            else:
-                symbol_path = (
-                    f"data/{selected_data_type}/{selected_interval}/{selected_symbol}/"
-                )
-
-            trading_pairs = self.directory_tree_provider.get_directory_tree(symbol_path)
-
-            # Filter out non-directory items
-            trading_pairs = [pair for pair in trading_pairs if pair.endswith("/")]
-
-            # Extract trading pair names
-            trading_pairs = [pair.split("/")[-2] for pair in trading_pairs]
-
-            if not trading_pairs:
-                logger.error(
-                    f"No trading pairs found for {selected_data_type}/{selected_interval}/{selected_symbol}"
-                )
-                return
-
             # Use pre-selected trading pair from command line if provided
-            if args.trading_pair and args.trading_pair in trading_pairs:
+            if args.trading_pair:
                 selected_pair = args.trading_pair
                 logger.info(f"Using pre-selected trading pair: {selected_pair}")
             else:
-                # Prompt the user to select a trading pair
+                # Get trading pairs for the selected data type, interval, and symbol
+                logger.info(
+                    f"Getting trading pairs for {selected_data_type}/{selected_interval}/{selected_symbol}..."
+                )
+
+                # Construct the path differently for futures data
+                if selected_data_type == "futures" and "/" in selected_interval:
+                    # Split the interval into subtype and actual interval
+                    subtype, actual_interval = selected_interval.split("/")
+                    symbol_path = f"data/{selected_data_type}/{subtype}/{actual_interval}/{selected_symbol}/"
+                else:
+                    symbol_path = f"data/{selected_data_type}/{selected_interval}/{selected_symbol}/"
+
+                trading_pairs = self.directory_tree_provider.get_directory_tree(
+                    symbol_path
+                )
+
+                # Filter out non-directory items
+                trading_pairs = [pair for pair in trading_pairs if pair.endswith("/")]
+
+                # Extract trading pair names
+                trading_pairs = [pair.split("/")[-2] for pair in trading_pairs]
+
+                if not trading_pairs:
+                    logger.error(
+                        f"No trading pairs found for {selected_data_type}/{selected_interval}/{selected_symbol}"
+                    )
+                    return
+                    # Prompt the user to select a trading pair
                 selected_pair = self._select_from_list(
                     trading_pairs, f"Available {selected_symbol} trading pairs:"
                 )
@@ -473,47 +468,49 @@ class CliApp:
                 "premiumIndexKlines",
             ]
             if selected_symbol in time_interval_data_types:
-                # For klines, we need to get the available time intervals (e.g., 1m, 5m, etc.)
-                logger.info(
-                    f"Getting time intervals for {selected_data_type}/{selected_interval}/{selected_symbol}/{selected_pair}..."
-                )
-
-                # Construct the path differently for futures data
-                if selected_data_type == "futures" and "/" in selected_interval:
-                    # Split the interval into subtype and actual interval
-                    subtype, actual_interval = selected_interval.split("/")
-                    pair_path = f"data/{selected_data_type}/{subtype}/{actual_interval}/{selected_symbol}/{selected_pair}/"
-                else:
-                    pair_path = f"data/{selected_data_type}/{selected_interval}/{selected_symbol}/{selected_pair}/"
-
-                # Get all time intervals
-                time_intervals = self.directory_tree_provider.get_directory_tree(
-                    pair_path
-                )
-
-                # Filter out non-directory items
-                time_intervals = [
-                    interval for interval in time_intervals if interval.endswith("/")
-                ]
-
-                # Extract time interval names
-                time_intervals = [
-                    interval.split("/")[-2] for interval in time_intervals
-                ]
-
-                if not time_intervals:
-                    logger.error(
-                        f"No time intervals found for {selected_data_type}/{selected_interval}/{selected_symbol}/{selected_pair}"
-                    )
-                    return
 
                 # Use pre-selected time interval from command line if provided
-                if args.time_interval and args.time_interval in time_intervals:
+                if args.time_interval:
                     selected_time_interval = args.time_interval
                     logger.info(
                         f"Using pre-selected time interval: {selected_time_interval}"
                     )
                 else:
+                    # For klines, we need to get the available time intervals (e.g., 1m, 5m, etc.)
+                    logger.info(
+                        f"Getting time intervals for {selected_data_type}/{selected_interval}/{selected_symbol}/{selected_pair}..."
+                    )
+
+                    # Construct the path differently for futures data
+                    if selected_data_type == "futures" and "/" in selected_interval:
+                        # Split the interval into subtype and actual interval
+                        subtype, actual_interval = selected_interval.split("/")
+                        pair_path = f"data/{selected_data_type}/{subtype}/{actual_interval}/{selected_symbol}/{selected_pair}/"
+                    else:
+                        pair_path = f"data/{selected_data_type}/{selected_interval}/{selected_symbol}/{selected_pair}/"
+
+                    # Get all time intervals
+                    time_intervals = self.directory_tree_provider.get_directory_tree(
+                        pair_path
+                    )
+
+                    # Filter out non-directory items
+                    time_intervals = [
+                        interval
+                        for interval in time_intervals
+                        if interval.endswith("/")
+                    ]
+
+                    # Extract time interval names
+                    time_intervals = [
+                        interval.split("/")[-2] for interval in time_intervals
+                    ]
+
+                    if not time_intervals:
+                        logger.error(
+                            f"No time intervals found for {selected_data_type}/{selected_interval}/{selected_symbol}/{selected_pair}"
+                        )
+                        return
                     # Prompt the user to select a time interval
                     selected_time_interval = self._select_from_list(
                         time_intervals, "Available time intervals (e.g., 1m, 5m):"
@@ -534,14 +531,14 @@ class CliApp:
 
                 # Get all files in the directory
                 all_files = self.directory_tree_provider.get_directory_tree(path)
-                logger.info(
-                    f"Raw files from directory tree:\n {all_files[0] + ' -> ' + all_files[-1] if len(all_files) > 10 else all_files}"
-                )
+                # logger.info(
+                #     f"Raw files from directory tree:\n {all_files[0] + ' -> ' + all_files[-1] if len(all_files) > 10 else all_files}"
+                # )
 
                 # Filter out directories and only keep actual files (those with extensions)
                 files = [file for file in all_files if "." in file.split("/")[-1]]
                 logger.info(
-                    f"Files after filtering for extensions:\n {files[0] + ' -> ' + files[-1] if len(files) > 10 else files}"
+                    f"Files after filtering for extensions:\n {'Begin: ' + files[0] + '    End: ' + files[-1] if len(files) > 10 else files}"
                 )
 
             else:
@@ -560,14 +557,14 @@ class CliApp:
 
                 # Get all files in the directory
                 all_files = self.directory_tree_provider.get_directory_tree(path)
-                logger.info(
-                    f"Raw files from directory tree:\n {all_files[0] + ' -> ' + all_files[-1] if len(all_files) > 10 else all_files}"
-                )
+                # logger.info(
+                #     f"Raw files from directory tree:\n {all_files[0] + ' -> ' + all_files[-1] if len(all_files) > 10 else all_files}"
+                # )
 
                 # Filter out directories and only keep actual files (those with extensions)
                 files = [file for file in all_files if "." in file.split("/")[-1]]
                 logger.info(
-                    f"Files after filtering for extensions:\n {files[0] + ' -> ' + files[-1] if len(files) > 10 else files}"
+                    f"Files after filtering for extensions:\n {'Begin: ' + files[0] + '    End: ' + files[-1] if len(files) > 10 else files}"
                 )
 
                 # For non-klines data types, we don't need to select a time interval
