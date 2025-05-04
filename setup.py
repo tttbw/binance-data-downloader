@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="binance-data-downloader",
+    name="binance_data_downloader",
     version="0.1.2",
     packages=find_packages(),
     install_requires=[
@@ -14,7 +14,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "binance-data-downloader=src.cli.cli:main",
+            "binance_data_downloader=src.cli.cli:main",
         ],
     },
     author="Zhaorong Dai",
